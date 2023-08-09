@@ -55,5 +55,5 @@ def compute_JacSimStar (graph='', decay_factor=0, iterations=0, alpha_val=1.0,li
         else: ## for out-link or none
             result_matrix =  decay_factor * (alpha_val* jaccard_scores + (1-alpha_val) * (norm_adj * result_matrix * norm_adj.T)) #+ iden_matrix
         np.fill_diagonal(result_matrix,1)
-    print('Computation Time is Written in the File ...\n') 
+    print('JasSin* computation is completed ...\n') 
     return result_matrix
