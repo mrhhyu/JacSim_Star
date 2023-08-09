@@ -15,4 +15,4 @@ scikit-learn >=1.0.*
 A graph must be represented as a text file under the *edge list format* in which, each line corresponds to an edge in the graph, tab is used as the separator of the two nodes, and the node index is started from 0. 
 
 ## Citation:
-> Masoud Reyhani Hamedani and Sang-Wook Kim. 2021. JacSim*: An Effective and Efficient Solution to the Pairwise Normalization Problem in SimRank. Information Sciences, Vol. 9, pages= 146038-146049. https://doi.org/10.1109/ACCESS.2021.3123114
+> Masoud Reyhani Hamedani and Sang-Wook Kim. 2021. JacSim*: An Effective and Efficient Solution to the Pairwise Normalization Problem in SimRank. IEEE Access, Vol. 9, pages= 146038-146049. https://doi.org/10.1109/ACCESS.2021.3123114
