@@ -158,9 +158,6 @@ def initializatoin (graph_='', decay_factor_=0, alpha_=1.0, iterations_=0, link_
     return current_iteration
        
 def JacSim_Star (core_number):
-    '''
-        It is identical to JacSim_in_or_out but has shorter codes
-    '''
     for target_node_index in range (0+core_number,len(keyList),total_core_num):
         target_node = keyList[target_node_index]
         for node_index in range (target_node_index+1,len(keyList)):       # s(i,i) NOT is computed
