@@ -1,45 +1,18 @@
 '''
 Created on Jun 15, 2021
-
 Implements the Matrix Form of JacSim* for directed and undirected graphs.
-    
 @author: masoud
 '''
 import numpy as np
 import networkx as nx
-import os
-import time
 from sklearn.preprocessing import normalize
 
-GT_members = []
-
-def GT_extract(GT_path):
-    '''
-        extracts the ground truth sets;
-    '''
-    GT_members.clear()    
-    num_of_gtsets = next(os.walk(GT_path))[2] #dir is your directory path as string
-    print ("# of ground truth sets: ",len(num_of_gtsets))
-    
-    for i in range(1,len(num_of_gtsets)+1):
-        if i <10:
-            GT_file = open (GT_path+"0"+str(i)+".txt",'r')
-        else:
-            GT_file = open (GT_path+str(i)+".txt",'r')
-        for line in GT_file:
-            if int(line) not in GT_members:
-                GT_members.append(int(line))
-    print ("# of ground truth nodes: ",len(GT_members))
-
-
-def compute_JacSimStar (graph='', decay_factor=0, iterations=0, alpha_val=1.0,link_type='',GT_path=''):
+def compute_JacSimStar (graph='', decay_factor=0, iterations=0, alpha_val=1.0,link_type=''):
             
     if link_type not in {'in-link', 'out-link','none'}:
         print('Link-type must be in-link, out-link, or none ...')
         return
-    print("JacSim* Matrix Form is Started ....... ")
-    GT_extract(GT_path)   
-    
+    print("JacSim* Matrix Form is Started ....... ")    
     #============================================================================================
         # reading graph, computing Jaccard scores
     #============================================================================================    
@@ -83,38 +56,4 @@ def compute_JacSimStar (graph='', decay_factor=0, iterations=0, alpha_val=1.0,li
             result_matrix =  decay_factor * (alpha_val* jaccard_scores + (1-alpha_val) * (norm_adj * result_matrix * norm_adj.T)) #+ iden_matrix
         np.fill_diagonal(result_matrix,1)
     print('Computation Time is Written in the File ...\n') 
-    return result_matrix,GT_members
-
-
-
-
-
-
-'''
-
-compute_JacSimStar(graph="/home/masoud/backup_1/data/feature_learning/email_EU/dataset/email_EU_directed_graph.txt", 
-           result_path="../result_test/email_EU/", 
-           decay_factor=0.8,
-           iterations=10,
-           alpha_val=0.9,
-           topK=30, 
-           link_type='in-link', ## {'in-link', 'out-link'} for directed graphs, 2) {'none'} for undirected graphs
-           write_result=True
-           ) # 
-
-
-'''
-    
-
-#'''
-res, GT = compute_JacSimStar(graph="/home/masoud/backup_1/data/feature_learning/email_EU/dataset/email_EU_directed_graph.txt",
-               GT_path="/home/masoud/backup_1/data/feature_learning/email_EU/dataset/ground_truth/",                             
-               decay_factor=0.8,
-               iterations=5,
-               alpha_val=0.4,
-               link_type='in-link' ## {'in-link', 'out-link'} for directed graphs, 2) {'none'} for undirected graphs
-           ) # 
-
-from write_to_file import write_to_file
-write_to_file(res, '', '', '', 30, 5, GT, adamic_type='MF')   
-#'''
+    return result_matrix
