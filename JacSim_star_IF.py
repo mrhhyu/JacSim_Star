@@ -1,8 +1,6 @@
 '''
 Created on June 10, 2021
-
 Implements the Iterative Form of JacSim* for directed and undirected graphs by using multiprocessing.
-
 @author: masoud
 '''
 
@@ -28,7 +26,6 @@ current_iteration = None ## --- shared matrix among all cores and manipulated by
 jaccard_scores = None ## 
 info_string = ''
 total_core_num=0 ## -- keeps the number of CPU cores
-
     
 def read_graph_in_out (graph, link_type):
     '''
@@ -66,7 +63,6 @@ def read_graph_in_out (graph, link_type):
 def initializatoin (graph_='', decay_factor_=0, alpha_=1.0, iterations_=0, link_type_='', total_core_num_=0):
     '''
         initialize the required variables and memories for all process.
-        @note: 'result_path_' must have '/' at the end 
     '''    
 
     global graph
@@ -97,12 +93,10 @@ def initializatoin (graph_='', decay_factor_=0, alpha_=1.0, iterations_=0, link_
         print('Link-type must be in-link, out-link, or none ...')
         return        
     print("JacSim* Iterative Form (multi-processing) is Started ....... ")
-                
     #============================================================================================
         # reading graph; constructing the link set of each node
     #============================================================================================
     read_graph_in_out(graph, link_type)    
-
     # =================================================================================
         # defines a matrix that is SHARED among all cores
     # =================================================================================
@@ -142,7 +136,6 @@ def initializatoin (graph_='', decay_factor_=0, alpha_=1.0, iterations_=0, link_
                 last_iteration[target_node][node] = last_iteration[node][target_node] = (decay_factor*alpha_)*(intersection_size/float (union_size))
                             
     last_iteration = np.ctypeslib.as_array(last_iteration)
-    
     print('# of nodes with non-empty common neighbor set: '+ str(non_empty_neighb_intersec))    
     
     # ==============================================================================================
@@ -153,20 +146,16 @@ def initializatoin (graph_='', decay_factor_=0, alpha_=1.0, iterations_=0, link_
         current_iteration_base = np.ctypeslib.as_ctypes(np.zeros( (len(last_iteration),len(last_iteration))))         
         current_iteration = sharedctypes.RawArray(current_iteration_base._type_, current_iteration_base)
         jobs = []                    
-        
         for i in range(total_core_num):
             p = Process(target = JacSim_Star, args = (i,))
             jobs.append(p)
             p.start()
-        
         for i in range(total_core_num):
             jobs[i].join()                    
-        
         current_iteration = np.ctypeslib.as_array(current_iteration) ## we need to change the ctypes-array as a np-array to apply np-array's related operations
         np.fill_diagonal(current_iteration,1)  ## diagonal entries again are set as 1 
         last_iteration = current_iteration
     return current_iteration
-        
        
 def JacSim_Star (core_number):
     '''
@@ -192,50 +181,3 @@ def JacSim_Star (core_number):
                 current_iteration[target_node][node] = current_iteration[node][target_node] = decay_factor * ( alpha_val* jaccard_scores[target_node][node] + (1.0-alpha_val) * sum_/(len(target_neighbors)*len(node_neighbors) ))
             else:
                 current_iteration[target_node][node] = current_iteration[node][target_node] = decay_factor * alpha_val * jaccard_scores[target_node][node]                                 
-
-       
-def write_all(result_matrix, iteration):
-    '''
-        writes all results in the file
-    '''
-    sim_file = open (result_path+ds_name+info_string+'ALL_'+str(iteration),'w')
-    sim_file.write("result of IJacSim iterative form (multi-processor) with "+ds_name+'\n')    
-
-    for target_node in range (0,len(result_matrix)):
-        for node in range (0,len(result_matrix)):
-            val = result_matrix[target_node][node]
-            if val != 0: 
-                sim_file.write(str(target_node)+','+str(node)+','+str(round(val,5))+'\n')
-    sim_file.close()  
-    print ("The result of I-JacSim for dataset '{}' on iteration '{}', alpha {} is written in the file by multi-processing!".format(ds_name, iteration, alpha_val)) 
-    print('=========================================================================================================================')
-
-    
-       
-    
-if __name__ == '__main__':
-       
-    #'''
-    
-    res = initializatoin(graph_="/home/masoud/backup_1/data/feature_learning/email_EU/dataset/email_EU_directed_graph.txt", 
-               decay_factor_=0.8, 
-               alpha_=0.4,
-               iterations_=5, 
-               link_type_='in-link', # 1) {'in-link', 'out-link'} for directed graphs, 2) {'none'} for undirected graphs
-               total_core_num_=5) #
-    write_all(res,5)
-    #'''
-
-    '''
-    initializatoin(graph_="graph2.txt", 
-               GT_path_="ground_truth/", 
-               result_path_="../result_test/",
-               ds_name_='graph2', 
-               decay_factor_=0.8, 
-               alpha_=0.4,
-               iterations_=10, 
-               topK_=30,  
-               link_type_='in-link', # 1) {'in-link', 'out-link'} for directed graphs, 2) {'none'} for undirected graphs
-               total_core_num_=1,
-               write_result=True) #
-    '''
