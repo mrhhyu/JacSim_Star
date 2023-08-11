@@ -29,7 +29,7 @@ def compute_JacSimStar (graph='', decay_factor=0, iterations=0, alpha_val=1.0,li
         norm_adj = normalize(adj, norm='l1', axis=0) # column normalized adjacency matrix
         print("Column normalized adjacency matrix constructed ...")
              
-    else: ## for out-link or none
+    else: ## for out-link or undirected graph
         U = adj*J + (adj*J).T
         U = 1/(U-(adj*adj.T)) ## We compute (1/UNION-INTERSECT)
         print("Union matrix U is created ...")    
