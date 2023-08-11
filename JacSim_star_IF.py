@@ -89,7 +89,7 @@ def initializatoin (graph_='', decay_factor_=0, alpha_=1.0, iterations_=0, link_
     link_type = link_type_
     total_core_num = total_core_num_   
 
-    if link_type not in {'in-link', 'out-link','none'}:
+    if link_type not in {'in-link', 'out-link','none'}: ## in-links, out-links, or undirected graphs
         print('Link-type must be in-link, out-link, or none ...')
         return        
     print("JacSim* Iterative Form (multi-processing) is Started ....... ")
