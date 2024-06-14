@@ -6,9 +6,9 @@ This repository provides the Python implementations of JasSim*, **both** Matrix 
 JacSim* is a recursive link-based similarity measure, which is applicable to **both** directed and undirected graphs. In the case of directed graphs, similarity scores can be computed based on _any_ of in-links or out-links. In order to use JacSim*, the following packages are required:
 ```
 Python       >= 3.8
-networkx     >=2.6.*
-numpy        >=1.21.*
-scikit-learn >=1.0.*
+networkx     =2.6.*
+numpy        =1.21.*
+scikit-learn =1.0.*
 ```
 
 **Graph file format:**
