@@ -12,7 +12,9 @@ scikit-learn =1.0.*
 ```
 
 **Graph file format:**
+
 A1) A graph must be represented as a text file under the **edge list format** in which, each line corresponds to an edge in the graph, tab is used as the separator of the two nodes, and the node index is started from 0.
+
 2) A single original link in an **undirected graph and its train/test splitted graphs** must be represented via two links in both directions.
 
 ## Citation:
